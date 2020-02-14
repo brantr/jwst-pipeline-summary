@@ -1,6 +1,6 @@
 # JWST Pipeline Reduction Notes
 
-### Required software
+#### Required software
 
 * astropy -- available via pip
 * glue -- available via pip
@@ -43,7 +43,7 @@ Then, to make the package available via python, make a link to the $jwst/jwst$ d
 
 * [The ASDF Read the Docs](https://asdf-standard.readthedocs.io/en/latest/asdf_in_fits.html)
 
-### Pipeline Stages
+## Pipeline Stages
 
 * [STScI Pipeline Stages](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/main.html#pipelines)
 * [Stage 2 Imaging Processing](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/calwebb_image2.html#calwebb-image2)
@@ -92,3 +92,98 @@ The outputs are cosmic ray-flagged exposures ("\_crf"), which has an updated DQ 
 * [resample](https://jwst-pipeline.readthedocs.io/en/latest/jwst/resample/main.html) Resamples images based on WCS and distortion info, and produces a single undistorted product.  Either a single image or an association table.  The parameters for drizzle get provided by DRIZPARS reference from CRDS. Output data uses WCS of all inputs, the output WCS defines a field-of-view encompasseds all input images with same orientation and plate scale as the FIRST LISTED INPUT.  Uses the "C-based" cdriz routine. A full description drizzle is at [DrizzlePac Handbook](http://www.stsci.edu/scientific-community/software/drizzlepac.html).
 
 * [source_catalog](https://jwst-pipeline.readthedocs.io/en/latest/jwst/source_catalog/main.html) Produces source photometry and morphologies.  Image segmentation is from photutils source extraction, based on threshold method. Deblending uses photutils [deblender](https://photutils.readthedocs.io/en/latest/segmentation.html#source-deblending). Properties computed for each object are fluxes and errors, ab mags and errors, area, semi major and semiminor, orientation, and sky coordinates at bounding box corners.
+
+## JWST FITS Data Format
+
+* Info on the JWST data products is [here](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/index.html).
+* [Common features](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/common_features.html) of JWST data are a FITS primary HDU with NAXIS=0, and headers of each extension depending on the datatype, and data in one or more FITS IMAGE extensions.  There are often also ASDF extensions.
+
+* [Countrate data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#countrate-data-rate-and-rateints).
+
+For rateints:
+
+* HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions
+* HDU 1 has EXTNAME=SCI, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 2 has EXTNAME=ERR, IMAGE HDU type, float 32 data type, ncols x nrows x nints
+* HDU 3 has EXTNAME=DQ, IMAGE HDU type, uint32 data type, ncols x nrows x nints
+* HDU 4 has EXTNAME=INT_TIMES, BINTABLE HDU type, N/A data type, nints (rows) x 7 cols
+* HDU 5 has EXTNAME=VAR_POISSON, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 6 has EXTNAME=VAR_RNOISE, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 7 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable
+
+SCI is data array of pixels in DN/s units. multiple integrations stored in 3rd axis.
+ERR is data array with uncertainty on per-integration basis. Combined VAR_POISSON AND VAR_RNOISE as std dev.
+DQ is data quality flags for each integration.
+INT_TIMES is tabel of beginning, middle, and end times for each integration.
+VAR_POISSON is data with per integration variance for each pixel based on Poisson noise
+VAR_RNOISE is data with per integration read noise per pixel.
+ASDF is data model meta data.  These are compatible with CubeModel.
+
+For rate:
+
+* HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions
+* HDU 1 has EXTNAME=SCI, IMAGE HDU type, float32 data type, ncols x nrows
+* HDU 2 has EXTNAME=ERR, IMAGE HDU type, float 32 data type, ncols x nrows
+* HDU 3 has EXTNAME=DQ, IMAGE HDU type, uint32 data type, ncols x nrows
+* HDU 4 has EXTNAME=VAR_POISSON, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 5 has EXTNAME=VAR_RNOISE, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 6 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable
+
+SCI is in DN/S. ERR is std dev of SCI incl poisson and read noise. DQ are data quality flags.  These are compatible with ImageModel data.
+
+* [Background subtracted data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#background-subtracted-data-bsub-and-bsubints)
+
+For bsub/bsubints:
+
+The bsub format is the same as rate.  The bsubints is the same format as rateints.
+
+* [Calibrated data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#calibrated-data-cal-and-calints)
+
+For calints:
+
+* HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions
+* HDU 1 has EXTNAME=SCI, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 2 has EXTNAME=ERR, IMAGE HDU type, float 32 data type, ncols x nrows x nints
+* HDU 3 has EXTNAME=DQ, IMAGE HDU type, uint32 data type, ncols x nrows x nints
+* HDU 4 has EXTNAME=INT_TIMES, BINTABLE HDU type, N/A data type, nints (rows) x 7 cols
+* HDU 5 has EXTNAME=VAR_POISSON, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 6 has EXTNAME=VAR_RNOISE, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 7 has EXTNAME=AREA, IMAGE HDU type, UNKNOWN data type, ncols x nrows 
+* HDU 8 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable
+
+The AREA extension has the effective area per pixels, added by photom.
+
+For cal:
+
+* HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions
+* HDU 1 has EXTNAME=SCI, IMAGE HDU type, float32 data type, ncols x nrows
+* HDU 2 has EXTNAME=ERR, IMAGE HDU type, float 32 data type, ncols x nrows
+* HDU 3 has EXTNAME=DQ, IMAGE HDU type, uint32 data type, ncols x nrows
+* HDU 4 has EXTNAME=VAR_POISSON, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 5 has EXTNAME=VAR_RNOISE, IMAGE HDU type, float32 data type, ncols x nrows x nints
+* HDU 6 has EXTNAME=AREA, IMAGE HDU type, UNKNOWN data type, ncols x nrows 
+* HDU 7 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable
+
+The AREA extension has the effective area per pixels, added by photom.
+
+
+* [Cosmic ray flagged data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#cosmic-ray-flagged-data-crf-and-crfints)
+
+For crf/crfints:
+
+The same as cal/calints.
+
+* [Resampled 2-D data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#resampled-2-d-data-i2d-and-s2d)
+
+For Resampled 2D data i2d:
+
+* HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions
+* HDU 1 has EXTNAME=SCI, IMAGE HDU type, float32 data type, ncols x nrows
+* HDU 2 has EXTNAME=CON, IMAGE HDU type, int 32 data type, ncols x nrows
+* HDU 3 has EXTNAME=WHT, IMAGE HDU type, float32 data type, ncols x nrows
+* HDU 4 has EXTNAME=HDRTAB, BINTABLE HDU type, N/A data type, variable
+* HDU 5 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable
+
+CON is context images, says which input contributes to output pixels. WHT is relative weight of output pixels (exposure time map). HDRTAB lists input images. ADSF is image meta data.  WHERE IS ERR?
+
+## ASN File Format
