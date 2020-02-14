@@ -204,6 +204,94 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>HDU 5 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable</li>
 </ul>
 <p>CON is context images, says which input contributes to output pixels. WHT is relative weight of output pixels (exposure time map). HDRTAB lists input images. ADSF is image meta data. WHERE IS ERR?</p>
-<h2 id="asn-file-format">ASN File Format</h2>
+<h2 id="associations-and-asn-file-format">Associations and ASN File Format</h2>
+<p>The types of JWST pipeline associations are discussed <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/index.html">here</a>. Level 2a Exposures (&quot;_rate.fits&quot;) are combined with <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level2_asn_technical.html">Level2 Image Aassociations</a>. Level 2b Images (&quot;_cal.fits&quot;) are combined with <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level3_asn_technical.html">Level3 Image Associations</a>. The data flow diagram is <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/technote_sdp_workflow.html">here</a>.</p>
+<ul>
+<li>Level 2 Example</li>
+</ul>
+<p>Here is the STScI Level2 association example:</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;asn_rule&quot;</span><span class="fu">:</span> <span class="st">&quot;Asn_Lv2Spec&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;asn_pool&quot;</span><span class="fu">:</span> <span class="st">&quot;jw82600_001_20160304T145416_pool&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;program&quot;</span><span class="fu">:</span> <span class="st">&quot;82600&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;asn_type&quot;</span><span class="fu">:</span> <span class="st">&quot;spec2&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;products&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+        <span class="fu">{</span>
+            <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;test_lrs1&quot;</span><span class="fu">,</span>
+            <span class="dt">&quot;members&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+                <span class="fu">{</span>
+                    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;test_lrs1_rate.fits&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
+                <span class="fu">}</span>
+            <span class="ot">]</span>
+        <span class="fu">}</span><span class="ot">,</span>
+        <span class="fu">{</span>
+            <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;test_lrs2bkg&quot;</span><span class="fu">,</span>
+            <span class="dt">&quot;members&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+                <span class="fu">{</span>
+                    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;test_lrs2bkg_rate.fits&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
+                <span class="fu">}</span>
+            <span class="ot">]</span>
+        <span class="fu">}</span><span class="ot">,</span>
+        <span class="fu">{</span>
+            <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;test_lrs2&quot;</span><span class="fu">,</span>
+            <span class="dt">&quot;members&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+                <span class="fu">{</span>
+                    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;test_lrs2_rate.fits&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
+                <span class="fu">}</span><span class="ot">,</span>
+                <span class="fu">{</span>
+                    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;test_lrs2bkg_rate.fits&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;background&quot;</span>
+                <span class="fu">}</span>
+            <span class="ot">]</span>
+        <span class="fu">}</span>
+    <span class="ot">]</span>
+<span class="fu">}</span></code></pre></div>
+<p>To add a member to the Level2 association, the only requirement is</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;jw_00003_cal.fits&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
+<span class="fu">}</span><span class="er">,</span></code></pre></div>
+<ul>
+<li>Level 3 Example</li>
+</ul>
+<p>Here is the STScI Level3 association example:</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;degraded_status&quot;</span><span class="fu">:</span> <span class="st">&quot;No known degraded exposures in association.&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;version_id&quot;</span><span class="fu">:</span> <span class="st">&quot;20160826t131159&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;asn_type&quot;</span><span class="fu">:</span> <span class="st">&quot;image3&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;asn_id&quot;</span><span class="fu">:</span> <span class="st">&quot;c3001&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;constraints&quot;</span><span class="fu">:</span> <span class="st">&quot;Constraints:</span><span class="ch">\n</span><span class="st">    opt_elem2: CLEAR</span><span class="ch">\n</span><span class="st">    detector: (?!NULL).+</span><span class="ch">\n</span><span class="st">    target_name: 1</span><span class="ch">\n</span><span class="st">    exp_type: NRC_IMAGE</span><span class="ch">\n</span><span class="st">    wfsvisit: NULL</span><span class="ch">\n</span><span class="st">    instrument: NIRCAM</span><span class="ch">\n</span><span class="st">    opt_elem: F090W</span><span class="ch">\n</span><span class="st">    program: 99009&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;asn_pool&quot;</span><span class="fu">:</span> <span class="st">&quot;mega_pool&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;asn_rule&quot;</span><span class="fu">:</span> <span class="st">&quot;Asn_Image&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;target&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;program&quot;</span><span class="fu">:</span> <span class="st">&quot;99009&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;products&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+        <span class="fu">{</span>
+            <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;jw99009-a3001_t001_nircam_f090w&quot;</span><span class="fu">,</span>
+            <span class="dt">&quot;members&quot;</span><span class="fu">:</span> <span class="ot">[</span>
+                <span class="fu">{</span>
+                    <span class="dt">&quot;exposerr&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span>
+                    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;jw_00001_cal.fits&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;asn_candidate&quot;</span><span class="fu">:</span> <span class="st">&quot;[(&#39;o001&#39;, &#39;observation&#39;)]&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
+                <span class="fu">}</span><span class="ot">,</span>
+                <span class="fu">{</span>
+                    <span class="dt">&quot;exposerr&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span>
+                    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;jw_00002_cal.fits&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;asn_candidate&quot;</span><span class="fu">:</span> <span class="st">&quot;[(&#39;o001&#39;, &#39;observation&#39;)]&quot;</span><span class="fu">,</span>
+                    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
+                <span class="fu">}</span>
+            <span class="ot">]</span>
+        <span class="fu">}</span>
+    <span class="ot">]</span>
+<span class="fu">}</span></code></pre></div>
+<p>To add a member to the Level3 association, the only requirement is</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;jw_00003_cal.fits&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
+<span class="fu">}</span><span class="er">,</span></code></pre></div>
 </body>
 </html>

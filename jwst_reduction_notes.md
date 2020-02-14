@@ -186,4 +186,106 @@ For Resampled 2D data i2d:
 
 CON is context images, says which input contributes to output pixels. WHT is relative weight of output pixels (exposure time map). HDRTAB lists input images. ADSF is image meta data.  WHERE IS ERR?
 
-## ASN File Format
+## Associations and ASN File Format
+
+The types of JWST pipeline associations are discussed [here](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/index.html). Level 2a Exposures ("\_rate.fits") are combined with [Level2 Image Aassociations](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level2_asn_technical.html). Level 2b Images ("\_cal.fits") are combined with [Level3 Image Associations](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level3_asn_technical.html). The data flow diagram is [here](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/technote_sdp_workflow.html).
+
+* Level 2 Example
+
+Here is the STScI Level2 association example:
+
+```json
+{
+    "asn_rule": "Asn_Lv2Spec",
+    "asn_pool": "jw82600_001_20160304T145416_pool",
+    "program": "82600",
+    "asn_type": "spec2",
+    "products": [
+        {
+            "name": "test_lrs1",
+            "members": [
+                {
+                    "expname": "test_lrs1_rate.fits",
+                    "exptype": "science"
+                }
+            ]
+        },
+        {
+            "name": "test_lrs2bkg",
+            "members": [
+                {
+                    "expname": "test_lrs2bkg_rate.fits",
+                    "exptype": "science"
+                }
+            ]
+        },
+        {
+            "name": "test_lrs2",
+            "members": [
+                {
+                    "expname": "test_lrs2_rate.fits",
+                    "exptype": "science"
+                },
+                {
+                    "expname": "test_lrs2bkg_rate.fits",
+                    "exptype": "background"
+                }
+            ]
+        }
+    ]
+}
+```
+To add a member to the Level2 association, the only requirement is
+
+```json
+{
+    "expname": "jw_00003_cal.fits",
+    "exptype": "science"
+},
+```
+
+* Level 3 Example
+
+Here is the STScI Level3 association example:
+
+```json
+{
+    "degraded_status": "No known degraded exposures in association.",
+    "version_id": "20160826t131159",
+    "asn_type": "image3",
+    "asn_id": "c3001",
+    "constraints": "Constraints:\n    opt_elem2: CLEAR\n    detector: (?!NULL).+\n    target_name: 1\n    exp_type: NRC_IMAGE\n    wfsvisit: NULL\n    instrument: NIRCAM\n    opt_elem: F090W\n    program: 99009",
+    "asn_pool": "mega_pool",
+    "asn_rule": "Asn_Image",
+    "target": "1",
+    "program": "99009",
+    "products": [
+        {
+            "name": "jw99009-a3001_t001_nircam_f090w",
+            "members": [
+                {
+                    "exposerr": null,
+                    "expname": "jw_00001_cal.fits",
+                    "asn_candidate": "[('o001', 'observation')]",
+                    "exptype": "science"
+                },
+                {
+                    "exposerr": null,
+                    "expname": "jw_00002_cal.fits",
+                    "asn_candidate": "[('o001', 'observation')]",
+                    "exptype": "science"
+                }
+            ]
+        }
+    ]
+}
+```
+
+To add a member to the Level3 association, the only requirement is
+
+```json
+{
+    "expname": "jw_00003_cal.fits",
+    "exptype": "science"
+},
+```
