@@ -100,6 +100,8 @@ The outputs are cosmic ray-flagged exposures ("\_crf"), which has an updated DQ 
 
 * [Countrate data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#countrate-data-rate-and-rateints).
 
+#### rate and rateints
+
 For rateints:
 
 * HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions
@@ -129,7 +131,10 @@ For rate:
 * HDU 5 has EXTNAME=VAR_RNOISE, IMAGE HDU type, float32 data type, ncols x nrows x nints
 * HDU 6 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable
 
-SCI is in DN/S. ERR is std dev of SCI incl poisson and read noise. DQ are data quality flags.  These are compatible with ImageModel data.
+SCI is in DN/s. ERR is std dev of SCI incl poisson and read noise. DQ are data quality flags.  These are compatible with ImageModel data.
+
+#### bsub and bsubints
+
 
 * [Background subtracted data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#background-subtracted-data-bsub-and-bsubints)
 
@@ -138,6 +143,8 @@ For bsub/bsubints:
 The bsub format is the same as rate.  The bsubints is the same format as rateints.
 
 * [Calibrated data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#calibrated-data-cal-and-calints)
+
+#### cal and calints
 
 For calints:
 
@@ -166,12 +173,18 @@ For cal:
 
 The AREA extension has the effective area per pixels, added by photom.
 
+#### crf and crfints
 
 * [Cosmic ray flagged data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#cosmic-ray-flagged-data-crf-and-crfints)
+
 
 For crf/crfints:
 
 The same as cal/calints.
+
+
+#### i2d
+
 
 * [Resampled 2-D data](https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#resampled-2-d-data-i2d-and-s2d)
 
@@ -190,7 +203,23 @@ CON is context images, says which input contributes to output pixels. WHT is rel
 
 The types of JWST pipeline associations are discussed [here](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/index.html). Level 2a Exposures ("\_rate.fits") are combined with [Level2 Image Aassociations](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level2_asn_technical.html). Level 2b Images ("\_cal.fits") are combined with [Level3 Image Associations](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level3_asn_technical.html). The data flow diagram is [here](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/technote_sdp_workflow.html).
 
-* Level 2 Example
+#### Creating ASNs
+
+There is a utility to create an ASN file from a list of fits files, called [asn_from_list](https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/asn_from_list.html#asn-from-list).
+
+The usage for level 2 is:
+```bash
+asn_from_list -o l2_asn.json -r DMSLevel2bBase *.fits
+```
+
+The usage for level 3 is:
+```bash
+asn_from_list -o l3_asn.json --product-name l3_results *.fits
+```
+
+All the data products will have the prefix provided and all files in the list will become science members of the association, with the assumption that all will become combined.
+
+#### Level 2 Example
 
 Here is the STScI Level2 association example:
 
@@ -244,7 +273,7 @@ To add a member to the Level2 association, the only requirement is
 },
 ```
 
-* Level 3 Example
+#### Level 3 Example
 
 Here is the STScI Level3 association example:
 

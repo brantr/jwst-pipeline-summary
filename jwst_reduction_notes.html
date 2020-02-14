@@ -130,6 +130,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/common_features.html">Common features</a> of JWST data are a FITS primary HDU with NAXIS=0, and headers of each extension depending on the datatype, and data in one or more FITS IMAGE extensions. There are often also ASDF extensions.</p></li>
 <li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#countrate-data-rate-and-rateints">Countrate data</a>.</p></li>
 </ul>
+<h4 id="rate-and-rateints">rate and rateints</h4>
 <p>For rateints:</p>
 <ul>
 <li>HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions</li>
@@ -152,7 +153,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>HDU 5 has EXTNAME=VAR_RNOISE, IMAGE HDU type, float32 data type, ncols x nrows x nints</li>
 <li>HDU 6 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable</li>
 </ul>
-<p>SCI is in DN/S. ERR is std dev of SCI incl poisson and read noise. DQ are data quality flags. These are compatible with ImageModel data.</p>
+<p>SCI is in DN/s. ERR is std dev of SCI incl poisson and read noise. DQ are data quality flags. These are compatible with ImageModel data.</p>
+<h4 id="bsub-and-bsubints">bsub and bsubints</h4>
 <ul>
 <li><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#background-subtracted-data-bsub-and-bsubints">Background subtracted data</a></li>
 </ul>
@@ -161,6 +163,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#calibrated-data-cal-and-calints">Calibrated data</a></li>
 </ul>
+<h4 id="cal-and-calints">cal and calints</h4>
 <p>For calints:</p>
 <ul>
 <li>HDU 0 has no EXTNAME, primary HDU type, N/A data type, N/A dimensions</li>
@@ -186,11 +189,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>HDU 7 has EXTNAME=ASDF, BINTABLE HDU type, N/A data type, variable</li>
 </ul>
 <p>The AREA extension has the effective area per pixels, added by photom.</p>
+<h4 id="crf-and-crfints">crf and crfints</h4>
 <ul>
 <li><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#cosmic-ray-flagged-data-crf-and-crfints">Cosmic ray flagged data</a></li>
 </ul>
 <p>For crf/crfints:</p>
 <p>The same as cal/calints.</p>
+<h4 id="i2d">i2d</h4>
 <ul>
 <li><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/data_products/science_products.html#resampled-2-d-data-i2d-and-s2d">Resampled 2-D data</a></li>
 </ul>
@@ -206,9 +211,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>CON is context images, says which input contributes to output pixels. WHT is relative weight of output pixels (exposure time map). HDRTAB lists input images. ADSF is image meta data. WHERE IS ERR?</p>
 <h2 id="associations-and-asn-file-format">Associations and ASN File Format</h2>
 <p>The types of JWST pipeline associations are discussed <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/index.html">here</a>. Level 2a Exposures (&quot;_rate.fits&quot;) are combined with <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level2_asn_technical.html">Level2 Image Aassociations</a>. Level 2b Images (&quot;_cal.fits&quot;) are combined with <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/level3_asn_technical.html">Level3 Image Associations</a>. The data flow diagram is <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/technote_sdp_workflow.html">here</a>.</p>
-<ul>
-<li>Level 2 Example</li>
-</ul>
+<h4 id="creating-asns">Creating ASNs</h4>
+<p>There is a utility to create an ASN file from a list of fits files, called <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/associations/asn_from_list.html#asn-from-list">asn_from_list</a>.</p>
+<p>The usage for level 2 is:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">asn_from_list</span> -o l2_asn.json -r DMSLevel2bBase *.fits</code></pre></div>
+<p>The usage for level 3 is:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">asn_from_list</span> -o l3_asn.json --product-name l3_results *.fits</code></pre></div>
+<p>All the data products will have the prefix provided and all files in the list will become science members of the association, with the assumption that all will become combined.</p>
+<h4 id="level-2-example">Level 2 Example</h4>
 <p>Here is the STScI Level2 association example:</p>
 <div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
     <span class="dt">&quot;asn_rule&quot;</span><span class="fu">:</span> <span class="st">&quot;Asn_Lv2Spec&quot;</span><span class="fu">,</span>
@@ -254,9 +264,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">&quot;expname&quot;</span><span class="fu">:</span> <span class="st">&quot;jw_00003_cal.fits&quot;</span><span class="fu">,</span>
     <span class="dt">&quot;exptype&quot;</span><span class="fu">:</span> <span class="st">&quot;science&quot;</span>
 <span class="fu">}</span><span class="er">,</span></code></pre></div>
-<ul>
-<li>Level 3 Example</li>
-</ul>
+<h4 id="level-3-example">Level 3 Example</h4>
 <p>Here is the STScI Level3 association example:</p>
 <div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
     <span class="dt">&quot;degraded_status&quot;</span><span class="fu">:</span> <span class="st">&quot;No known degraded exposures in association.&quot;</span><span class="fu">,</span>
