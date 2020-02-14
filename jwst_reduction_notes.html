@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<h1 id="jwst-pipeline-reduction-notes">JWST Pipeline Reduction Notes</h1>
+<h3 id="required-software">Required software</h3>
+<ul>
+<li>astropy -- available via pip</li>
+<li>glue -- available via pip</li>
+<li>ginga -- available via pip</li>
+<li>photutils -- available via pip</li>
+<li>astroimtools -- available via pip</li>
+<li>imexam -- available via pip</li>
+<li>asdf -- available via pip</li>
+<li>gwcs -- available via pip</li>
+<li>synphot -- available via pip</li>
+<li>jwst -- see below</li>
+</ul>
+<h4 id="asdf-depends-on">ASDF depends on</h4>
+<ul>
+<li>numpy -- available via pip</li>
+<li>jsonschema -- available via pip</li>
+<li>pyyaml -- available via pip</li>
+<li>six -- available via pip</li>
+</ul>
+<h3 id="jwst-info">JWST Info</h3>
+<ul>
+<li>the jwst package on pip is a dummy package that indicates no public release is available</li>
+<li>The STScI github site has the package available as <a href="https://github.com/spacetelescope/jwst">jwst</a>. You can</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">git</span> clone https://github.com/spacetelescope/jwst.git</code></pre></div>
+<p>Then, to make the package available via python, make a link to the <span class="math inline"><em>j</em><em>w</em><em>s</em><em>t</em>/<em>j</em><em>w</em><em>s</em><em>t</em></span> directory in <span class="math inline"><em>l</em><em>i</em><em>b</em>/<em>p</em><em>y</em><em>t</em><em>h</em><em>o</em><em>n</em>3.6/<em>s</em><em>i</em><em>t</em><em>e</em> − <em>p</em><em>a</em><em>c</em><em>k</em><em>a</em><em>g</em><em>e</em><em>s</em>/</span>.</p>
+<ul>
+<li>jwst depends on crds -- which is available via pip</li>
+<li>There is a <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/introduction.html">jwst pipeline introduction</a> on the STScI website.</li>
+<li>The strun script is in jwst/scripts. Note that &quot;python&quot; make need to be changed to &quot;python3&quot;.</li>
+</ul>
+<h3 id="gcws-info">GCWS Info</h3>
+<ul>
+<li><a href="https://github.com/spacetelescope/JWSTUserTraining2016/blob/master/Workshop_Notebooks/GWCS/GWCS.ipynb">STScI notebook on GWCS</a></li>
+<li>The &quot;forward&quot; direction is from detector to sky.</li>
+<li>The WCS is 0-based.</li>
+</ul>
+<h3 id="asdf-info">ASDF Info</h3>
+<ul>
+<li><a href="https://asdf-standard.readthedocs.io/en/latest/asdf_in_fits.html">The ASDF Read the Docs</a></li>
+</ul>
+<h3 id="pipeline-stages">Pipeline Stages</h3>
+<ul>
+<li><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/main.html#pipelines">STScI Pipeline Stages</a></li>
+<li><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/calwebb_image2.html#calwebb-image2">Stage 2 Imaging Processing</a></li>
+</ul>
+<p>Stage 2 involves the <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/background/index.html#background-step">background</a>, <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/assign_wcs/index.html#assign-wcs-step">assign_wcs</a>, <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/flatfield/index.html#flatfield-step">flat_field</a>, <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/photom/index.html#photom-step">photom</a>, and <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/resample/index.html#resample-step">resample</a> steps.</p>
+<p>The input is a countrate exposure, either &quot;_rate&quot; or &quot;_rateints&quot; files, or an ASN file with multiple inputs. The outputs are &quot;_bsub&quot; (if save_bsub==True) the data output from the background step, &quot;_cal&quot; a fully calibrated but unrectified expsoure, and &quot;_i2d&quot; a resampled data that is not permanent and is not passed along to Stage 3.</p>
+<ul>
+<li><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/calwebb_image3.html#calwebb-image3">Stage 3 Imaging Processing</a></li>
+</ul>
+<p>Stage 3 involves the combination of calibrated dat from multiple exposures into a single, rectified (distortion corrected) image. The input exposures are corrected for astrometric alignment, background matching, and outlier rejection. The steps are <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/tweakreg/index.html#tweakreg-step">tweakreg</a>, <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/skymatch/index.html#skymatch-step">skymatch</a>, <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/outlier_detection/index.html#outlier-detection-step">outlier_detection</a>, <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/resample/index.html#resample-step">resample</a>, and <a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/source_catalog/index.html#source-catalog-step">source_catalog</a> steps.</p>
+<p>The input are the calwebb_image2 image products (&quot;_cal&quot;) or an ASN file. If a single &quot;_cal&quot; file is used as input, only the resample and source_catalog steps are performed.</p>
+<p>The outputs are cosmic ray-flagged exposures (&quot;_crf&quot;), which has an updated DQ array. A resampled and combined image &quot;_i2d&quot; from the resample step (note the Stage 2 &quot;_i2d&quot; are usually not used). And a source catalog in an ASCII file &quot;ecsv&quot; format (&quot;_cat&quot;).</p>
+<h2 id="stage-2">Stage 2</h2>
+<ul>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/background/description.html">background</a> Subtracts background signal. Input is a single target exposure and one or more background exposures. For multiple background exposures, averaged and then iterative sigma clipped. The steps are clip SCI arrays of all background exposures, compute mean of unclipped sci values, sum the ERR arrays in quadratures for the bkg exposures clipping same input from the SCI arrays, convert to uncertainty in the mean, then combine the DQ arrays using bitwise OR. The average bkg is then subtracted from the targets. The bkg SCI is subtracted from the target SCI. The target ERR is unchanged (full error propagation not yet implemented). DQ arrays of bkg and target expourse are combined with bitwise OR. The &quot;S_BKDSUB&quot; keyword in the output will read as COMPLETE.</p></li>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/assign_wcs/main.html">assign_wcs</a> Associates a WCS object with each science exposure. There may be intermediate coordinate frames depending on the instrument. the WCS is saved in the ASDF extension of the FITS file. &quot;It can be accessed as an attribute of the meta object when the fits file is opened as a data model.&quot; Forward transforms is detector to world, and input positions or 0-based. Expects the basic WCS keywords in the SCI header. Distortion and spectral models are stored in the ASDF format. For each mode in &quot;EXP_TYPE&quot; keyword, assign_wcs gets the reference files from CRDS and applies transforms from detector to v2v3, then the basic WCS keywords transforms from v2v3 to world. The header keywords from v2v3 to world are (RA_REF, DEC_REF, V2_REF, V3_REF, ROLL_REF, RADESYS). If the FITS is opened as a DataModel, then WCS can be accessed via model.meta.wcs:</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> jwst.datamodels <span class="im">import</span> ImageModel
+<span class="op">&gt;&gt;&gt;</span> exp <span class="op">=</span> ImageModel(<span class="st">&#39;miri_fixedslit_assign_wcs.fits&#39;</span>)
+<span class="op">&gt;&gt;&gt;</span> ra, dec, lam <span class="op">=</span> exp.meta.wcs(x, y)
+<span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(ra, dec, lam)
+    (<span class="fl">329.97260532549336</span>, <span class="fl">372.0242999250267</span>, <span class="fl">5.4176100046836675</span>)</code></pre></div>
+<ul>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/flatfield/main.html">flat_field</a> The SCI array from the flat-field reference is divided into the SCI and ERR arrays, and the flat-field DQ array is combined with SCI DQ with bitwise OR. For Imaging datasets, find pixels with NaN or zero in FLAT reference SCI array, and set DQ to &quot;NO_FLAT_FIELD&quot;. Reset the values of pixels in the flat with DQ=&quot;No_FLAT_FIELD&quot; to 1.0. Apply the flat by dividing into SCI and ERR. Update SCI DQ with FLAT DQ. The total ERR array is updated as the square root of the quadratice sum of &quot;VAR_POISSON&quot;, &quot;VAR_RNOISE&quot;, &quot;VAR_FLAT&quot;.</p></li>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/photom/main.html">photom</a> Photometric calibration step. Converts from units of countrate to surface brightness. The calibration info is from a photometric reference file. The assign_wcs must be applied before photom. The &quot;S_PHOTOM&quot; keyword will read as &quot;COMPLETE&quot;. The &quot;BUNIT&quot; will be updated to reflect the change in units. The PHOTOM reference files include a scalar flux conversion constant depending on detector, filter, pupil, and grating. The scalar conversion constant is copied to the header PHOTMJSR, gives conversion from DN/s to megaJy/steradian. Stores PHOTUJA2 as well. The photom step also retrieves a pixel area map and copies into &quot;AREA&quot; extension in the science product. Also populates PIXAR_SR and PIXAR_A2. These are averages.</p></li>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/resample/main.html">resample</a> NOTE -- these data products at Stage 2 are not used in Stage 3. Resamples images based on WCS and distortion info, and produces a single undistorted product. Either a single image or an association table. The parameters for drizzle get provided by DRIZPARS reference from CRDS. Output data uses WCS of all inputs, the output WCS defines a field-of-view encompasseds all input images with same orientation and plate scale as the FIRST LISTED INPUT. Uses the &quot;C-based&quot; cdriz routine. A full description drizzle is at <a href="http://www.stsci.edu/scientific-community/software/drizzlepac.html">DrizzlePac Handbook</a>.</p></li>
+</ul>
+<h2 id="stage-3">Stage 3</h2>
+<ul>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/tweakreg/README.html">tweakreg</a> Creates an image catalog of point-like sources, uses their centroids to compute corrections to WCS such that sky catalogs from input images will align. Stars are found using photutils &quot;daofind&quot;. Linear coordinate transformations that align the star catalogs are defined. Tangent-plane corrections applied to GWCS pipeline are determined. The correction is implemented using &quot;TPCorr&quot;, and inserted into GWCS pipeline of image's WCS. More info on tweakreg <a href="https://tweakwcs.readthedocs.io/en/latest/">here</a>.</p></li>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/skymatch/README.html">skymatch</a> Computes the sky values in a collection of images that have both sky and signal. Can compute image sky values separately, or in a way to minimize sky differences between images. Compares total signal levels in the overlap regions and computes signal offsets that will minimize the residuals across the whole. Performed directly without resampling. Assumes assign_wcs has been performed. There are three versions of background computations. &quot;localmin&quot; computes sky statistics for each image, incorporating DQ flags. &quot;globalamin&quot; computes the minimum sky value across all input images. A single sky value is the background in all images. &quot;match&quot; algorithm computes a constant (within image) value to be applied to each input such that the mismatch in the computed background between all pairs of images is least squares minimized. The globalmin+match uses globalmin to find baseline sky and the match to equalize sky values among images. NOTE: I am guessing that match is the correct algorithm. DEFAULT is all non-zero DQ pixels are bad. Performed on flattend but not distortion corrected(!) images. Mask point like sources!</p></li>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/outlier_detection/main.html">outlier_detection</a> IDs bad pixels or cosmic rays in input images. Builds a stack of inmput data with same WCS, create median image, create blotted data for each original input, pixel-by-pixel stat comparison for difference from mean by some number of sigma. Flag bad pixels in the DQ array.</p></li>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/resample/main.html">resample</a> Resamples images based on WCS and distortion info, and produces a single undistorted product. Either a single image or an association table. The parameters for drizzle get provided by DRIZPARS reference from CRDS. Output data uses WCS of all inputs, the output WCS defines a field-of-view encompasseds all input images with same orientation and plate scale as the FIRST LISTED INPUT. Uses the &quot;C-based&quot; cdriz routine. A full description drizzle is at <a href="http://www.stsci.edu/scientific-community/software/drizzlepac.html">DrizzlePac Handbook</a>.</p></li>
+<li><p><a href="https://jwst-pipeline.readthedocs.io/en/latest/jwst/source_catalog/main.html">source_catalog</a> Produces source photometry and morphologies. Image segmentation is from photutils source extraction, based on threshold method. Deblending uses photutils <a href="https://photutils.readthedocs.io/en/latest/segmentation.html#source-deblending">deblender</a>. Properties computed for each object are fluxes and errors, ab mags and errors, area, semi major and semiminor, orientation, and sky coordinates at bounding box corners.</p></li>
+</ul>
+</body>
+</html>
