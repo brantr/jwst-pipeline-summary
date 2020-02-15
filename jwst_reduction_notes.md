@@ -45,14 +45,15 @@ Then, to make the package available via python, make a link to the $jwst/jwst$ d
 
 ## Pipeline Stages
 
-* [STScI Pipeline Stages](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/main.html#pipelines)
-* [Stage 2 Imaging Processing](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/calwebb_image2.html#calwebb-image2)
+More information is available at [STScI Pipeline Stages](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/main.html#pipelines)
+
+#### Info on [Stage 2 Imaging Processing](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/calwebb_image2.html#calwebb-image2)
 
 Stage 2 involves the [background](https://jwst-pipeline.readthedocs.io/en/latest/jwst/background/index.html#background-step), [assign_wcs](https://jwst-pipeline.readthedocs.io/en/latest/jwst/assign_wcs/index.html#assign-wcs-step), [flat_field](https://jwst-pipeline.readthedocs.io/en/latest/jwst/flatfield/index.html#flatfield-step), [photom](https://jwst-pipeline.readthedocs.io/en/latest/jwst/photom/index.html#photom-step), and [resample](https://jwst-pipeline.readthedocs.io/en/latest/jwst/resample/index.html#resample-step) steps.
 
 The input is a countrate exposure, either "\_rate" or "\_rateints" files, or an ASN file with multiple inputs. The outputs are "\_bsub" (if save_bsub==True) the data output from the background step, "\_cal" a fully calibrated but unrectified expsoure, and "\_i2d" a resampled data that is not permanent and is not passed along to Stage 3.
 
-* [Stage 3 Imaging Processing](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/calwebb_image3.html#calwebb-image3)
+#### Info on [Stage 3 Imaging Processing](https://jwst-pipeline.readthedocs.io/en/latest/jwst/pipeline/calwebb_image3.html#calwebb-image3)
 
 Stage 3 involves the combination of calibrated dat from multiple exposures into a single, rectified (distortion corrected) image.  The input exposures are corrected for astrometric alignment, background matching, and outlier rejection.  The steps are [tweakreg](https://jwst-pipeline.readthedocs.io/en/latest/jwst/tweakreg/index.html#tweakreg-step), [skymatch](https://jwst-pipeline.readthedocs.io/en/latest/jwst/skymatch/index.html#skymatch-step), [outlier_detection](https://jwst-pipeline.readthedocs.io/en/latest/jwst/outlier_detection/index.html#outlier-detection-step), [resample](https://jwst-pipeline.readthedocs.io/en/latest/jwst/resample/index.html#resample-step), and [source_catalog](https://jwst-pipeline.readthedocs.io/en/latest/jwst/source_catalog/index.html#source-catalog-step) steps.
 
@@ -68,11 +69,11 @@ The outputs are cosmic ray-flagged exposures ("\_crf"), which has an updated DQ 
 * [assign_wcs](https://jwst-pipeline.readthedocs.io/en/latest/jwst/assign_wcs/main.html) Associates a WCS object with each science exposure.  There may be intermediate coordinate frames depending on the instrument. the WCS is saved in the ASDF extension of the FITS file. "It can be accessed as an attribute of the meta object when the fits file is opened as a data model."  Forward transforms is detector to world, and input positions or 0-based.  Expects the basic WCS keywords in the SCI header.  Distortion and spectral models are stored in the ASDF format.  For each mode in "EXP_TYPE" keyword, assign_wcs gets the reference files from CRDS and applies transforms from detector to v2v3, then the basic WCS keywords transforms from v2v3 to world.  The header keywords from v2v3 to world are (RA_REF, DEC_REF, V2_REF, V3_REF, ROLL_REF, RADESYS).  If the FITS is opened as a DataModel, then WCS can be accessed via model.meta.wcs:
 
 ```python
->>> from jwst.datamodels import ImageModel
->>> exp = ImageModel('miri_fixedslit_assign_wcs.fits')
->>> ra, dec, lam = exp.meta.wcs(x, y)
->>> print(ra, dec, lam)
-    (329.97260532549336, 372.0242999250267, 5.4176100046836675)
+		>>> from jwst.datamodels import ImageModel
+		>>> exp = ImageModel('miri_fixedslit_assign_wcs.fits')
+		>>> ra, dec, lam = exp.meta.wcs(x, y)
+		>>> print(ra, dec, lam)
+    	(329.97260532549336, 372.0242999250267, 5.4176100046836675)
 ```
 
 * [flat_field](https://jwst-pipeline.readthedocs.io/en/latest/jwst/flatfield/main.html) The SCI array from the flat-field reference is divided into the SCI and ERR arrays, and the flat-field DQ array is combined with SCI DQ with bitwise OR.  For Imaging datasets, find pixels with NaN or zero in FLAT reference SCI array, and set DQ to "NO_FLAT_FIELD".  Reset the values of pixels in the flat with DQ="No_FLAT_FIELD" to 1.0.  Apply the flat by dividing into SCI and ERR. Update SCI DQ with FLAT DQ.  The total ERR array is updated as the square root of the quadratice sum of "VAR_POISSON", "VAR_RNOISE", "VAR_FLAT". 
