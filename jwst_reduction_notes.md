@@ -12,6 +12,9 @@
 * gwcs -- available via pip
 * synphot -- available via pip
 * jwst -- see below
+* stsci.image-- available via pip
+* drizzle -- available via pip
+* tweakwcs-- available via pip
 
 #### ASDF depends on
 * numpy -- available via pip
